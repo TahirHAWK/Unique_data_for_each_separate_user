@@ -6,6 +6,29 @@ let User = function(data){
     // adding properties to User object blueprint
 }
 
+User.prototype.cleanUp = function(){
+    if(typeof(this.data.username) != 'string'){
+        this.data.username = '';
+    }
+    if(typeof(this.data.email) != 'string'){
+        this.data.username = '';
+    }
+    if(typeof(this.data.password) != 'string'){
+        this.data.username = '';
+    }
+    // here we checked that, if the data submitted by user is not a string type data, it'll return an empty string.
+
+
+    // get rid of any bogus properties that is not part of our data model.
+    this.data = {
+        username: this.data.username.trim().toLowerCase(),
+        email: this.data.email.trim().toLowerCase(),
+        password: this.data.password
+    }
+    // trim() method will get rid of any empty spaces in the end or beginning of the text that was submitted by user.
+    // toLowerCase() method will convert all the text of the field into lowercase letters which is necessary for username and email.
+}
+
 User.prototype.validate = function(){
     if(this.data.username == ""){
         this.errors.push(' You must provide a username ')}
@@ -35,6 +58,8 @@ User.prototype.validate = function(){
 User.prototype.register = function(){
     // adding methods to User object blueprint
     // step #1: validate user data
+    this.cleanUp()
+    // cleanUp function makes sure that the data is submitted by the user is not an array or an object or anything that is not a string. Also converts the data to usable format.
     this.validate()
     // step #2: only if there are no validation errors then save data into a database
 }
