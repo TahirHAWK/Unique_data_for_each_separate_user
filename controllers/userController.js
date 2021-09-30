@@ -13,14 +13,16 @@ exports.logout = function(){
 exports.register = function(req, res){
     let user = new User(req.body)
     user.register()
-   if(user.errors.length){
-    res.send(user.errors)
-   } else {
-    res.send('congrats, there are no errors')
-   }
+    if(user.errors.length){
+        res.render('home-guest',{error: user.errors})
+        
+    } else {
+        res.render('home-guest',{error: 'na-da'})
+    }
 }
 
 
 exports.home = function(req, res){
-    res.render('home-guest')
+    let user = new User(req.body)
+    res.render('home-guest',{error: user.errors})
 }

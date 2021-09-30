@@ -1,1 +1,3 @@
-continue from adding validation to our model 13.00 minutes.
+continue from 
+quick misc clean up 
+00.00 minutes.
