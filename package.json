@@ -2,10 +2,10 @@
   "name": "complex_app_practice2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon app"
+    "watch": "nodemon db"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "marked": "^0.6.2",
     "md5": "^2.2.1",
-    "mongodb": "^3.2.6",
+    "mongodb": "^3.7.2",
     "nodemon": "^1.19.0",
     "sanitize-html": "^1.20.1",
     "socket.io": "^2.2.0",

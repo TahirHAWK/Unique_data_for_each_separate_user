@@ -1,4 +1,8 @@
+const usersCollection = require('../db').collection('users')
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
+
+
 
 let User = function(data){
     this.data = data
@@ -11,10 +15,10 @@ User.prototype.cleanUp = function(){
         this.data.username = '';
     }
     if(typeof(this.data.email) != 'string'){
-        this.data.username = '';
+        this.data.email = '';
     }
     if(typeof(this.data.password) != 'string'){
-        this.data.username = '';
+        this.data.password = '';
     }
     // here we checked that, if the data submitted by user is not a string type data, it'll return an empty string.
 
@@ -43,8 +47,8 @@ User.prototype.validate = function(){
     if(this.data.password.length < 12 && this.data.password.length > 0){
         this.errors.push(' Password should be at least 12 characters long ')
     }
-    if(this.data.password.length >= 100){
-        this.errors.push(' Password should not exceed 100 characters ')
+    if(this.data.password.length > 50){
+        this.errors.push(' Password should not exceed 50 characters ')
     }
     if(this.data.username.length >= 30){
         this.errors.push(' Username should not exceed 30 characters ')
@@ -55,6 +59,27 @@ User.prototype.validate = function(){
     // checking if your entered password and username is too long or not long enough.
 }
 
+User.prototype.login = function(){
+    let loginPromise =  new Promise((resolve, reject) => {
+        this.cleanUp()
+    usersCollection.findOne({username: this.data.username})
+        .then((attemptedUser) => {
+        if(attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)){
+            // bcrypt.compareSync is a method of the bcrypt package that compares two values that are accepted as parameters after hashing the first one.
+            console.log('user found from User model login prototype')
+            resolve('Congrats!!')
+        } else {
+            console.log('user not found from User model login prototype!!!')
+            reject('invalid username/password!!!!')
+
+        }
+    }).catch(function(){
+        reject("Please try again later.")
+    })
+    })
+    return loginPromise
+}
+
 User.prototype.register = function(){
     // adding methods to User object blueprint
     // step #1: validate user data
@@ -62,6 +87,16 @@ User.prototype.register = function(){
     // cleanUp function makes sure that the data is submitted by the user is not an array or an object or anything that is not a string. Also converts the data to usable format.
     this.validate()
     // step #2: only if there are no validation errors then save data into a database
+
+    if(!this.errors.length){
+        // hash user password
+        // hashing using bcrypt is actually 2 step process, first declaring salt from genSaltSync method and then use it as a parameter where it is actually gets hashed
+        let salt = bcrypt.genSaltSync(10)
+        this.data.password = bcrypt.hashSync(this.data.password, salt)
+        usersCollection.insertOne(this.data).then(
+            console.log('data inserted')
+            )
+    }
 }
 
 
