@@ -1,2 +1,2 @@
-continue with 
-hashing user passwords
+continue after 
+understanding sessions

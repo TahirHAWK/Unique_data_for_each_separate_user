@@ -1,4 +1,4 @@
-const usersCollection = require('../db').collection('users')
+const usersCollection = require('../db').db().collection('users')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 
@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs')
 let User = function(data){
     this.data = data
     this.errors = []
-    // adding properties to User object blueprint
+    // adding properties to User object blueprint 
 }
 
 User.prototype.cleanUp = function(){
@@ -66,8 +66,8 @@ User.prototype.login = function(){
         .then((attemptedUser) => {
         if(attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)){
             // bcrypt.compareSync is a method of the bcrypt package that compares two values that are accepted as parameters after hashing the first one.
-            console.log('user found from User model login prototype')
-            resolve('Congrats!!')
+            console.log('user found from User model login prototype: ', attemptedUser)
+            resolve(attemptedUser._id)
         } else {
             console.log('user not found from User model login prototype!!!')
             reject('invalid username/password!!!!')
